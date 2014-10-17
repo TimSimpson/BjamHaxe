@@ -1,0 +1,133 @@
+# This project shows how to use Haxe to add code to an existing C++ app.
+# The tricky part is compiling the associated Haxe stuff correctly.
+
+import boost ;
+import path ;
+using testing ;
+
+boost.use-project 1.55 ;
+
+lib         user32_lib
+    :
+    :       <name>User32
+    ;
+
+lib         zlib_lib
+    :
+    :       <name>zlib
+    ;
+
+project BjamHaxe
+    :   requirements
+            # Haxe stuff
+            # This is all from the Haxe libraries needed by any project using
+            # Haxe (I assume)
+            <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/include
+            <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3
+            <define>HX_WINDOWS
+            <define>HX_UNDEFINE_H       # Failure to set this leads to errors when the string class is included.
+            <define>HXCPP_SCRIPTABLE
+            <define>NOMINMAX
+            <define>HXCPP_VISIT_ALLOCS  # Failure to include this leads to a lack of a "__Visit" function on objects
+            #<define>HX_WINRT            # Without this it seems to use the old unicode style Windows functions
+                    # Causes more problems
+            #<define>INT_MAX=2,147,483,647
+            #<define>INT_MIN=-2,147,483,648
+
+            # Now add requirements for this project
+            <include>src
+            <include>target/include
+    :   usage-requirements
+        #TODO: Make Haxe an external lib.
+        #<library>/MACARONI_PROJECT_Lp3___Lp3_46_Engine_46_Core___DEV//Lp3_Core
+        # When linking dynamically, define the following flag:
+        #<link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+
+
+alias HaxeSources
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Array.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Class.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Dynamic.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Enum.cpp
+        #C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/ExampleMain.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Math.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/String.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Anon.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Cppia.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Debug.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Hash.cpp
+        #C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/NekoAPI.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Scriptable.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Boot.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/CppiaBuiltin.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/GC.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Interface.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Object.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/StdLibs.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/CFFI.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Date.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/GCInternal.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Lib.cpp
+        #C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/RunLibs.cpp
+        C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Thread.cpp
+
+        # RunLibs is problematic. When compiling a DLL including it leads to
+        # linking errors. But then the Haxe generated code needs it.
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+
+
+lib zlib
+        :       C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/libs/zlib/ZLib.cpp
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/adler32.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/compress.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/crc32.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/deflate.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/gzio.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/infback.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inffast.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inflate.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inftrees.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/trees.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/uncompr.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/zutil.c
+
+        ;
+
+
+
+lib hxcpp
+    : HaxeSources
+      zlib
+      user32_lib
+    ;
+
+
+lib haxe_code
+    :   target/src/__boot__.cpp
+        target/src/__files__.cpp
+        target/src/__lib__.cpp
+        target/src/__resources__.cpp
+        target/src/Std.cpp
+        target/src/Turtle.cpp
+        target/src/haxe/Log.cpp
+    ;
+
+obj haxe_code_main
+    :   target/src/__main__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+        <define>HX_DECLARE_MAIN
+        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
+    ;
+
+exe Example
+    :   hxcpp
+        haxe_code
+        haxe_code_main
+        #ExampleMain.cpp
+    ;
+
+install exe
+    : Example
+    ;

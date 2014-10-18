@@ -37,6 +37,22 @@ project BjamHaxe
         #<link>shared:<define>HXCPP_DLL_IMPORT
     ;
 
+lib zlib_hack
+        :       C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/libs/zlib/ZLib.cpp
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/adler32.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/compress.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/crc32.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/deflate.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/gzio.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/infback.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inffast.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inflate.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/inftrees.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/trees.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/uncompr.c
+                C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/zutil.c
+    : <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3
+        ;
 
 
 # This is in hxcpp lib... (?)
@@ -59,10 +75,9 @@ lib haxe_code
         target/src/haxe/Log.cpp
 
         #StdLibs  # <-- This makes NO SENSE. It's in hxcpp lib but I also need it here
-        /hxcpp//hxcpp_lib
 
         hack
-    #:   <define>HXCPP_DLL_EXPORT
+    #:   <define>HXCPP_DLL_IMPORT
     ;
 
 # Oddly enough this comes from hxcpp (I do not know what I am doing)
@@ -88,13 +103,24 @@ obj haxe_code_main
         # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
     ;
 
+lib         zlib_lib
+    :
+    :       <name>zlib
+    ;
+
 exe Example
     :   hxcpp
         haxe_code
-        #haxe_code_lib #/main
+        haxe_code_lib #/main
         Boot
         #StdLibs
         #ExampleMain.cpp
+
+
+        /hxcpp//hxcpp_lib
+        #zlib_lib
+      #  zlib_hack
+       # /hxcpp//zlib_lib
     ;
 
 install exe

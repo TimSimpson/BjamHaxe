@@ -193,15 +193,15 @@ lib zlib
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/trees.c
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/uncompr.c
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/zutil.c
-
+        :
+            <link>shared:<define>ZLIB_DLL
         ;
 
 
 
 lib hxcpp_lib
     : HaxeSources
-      zlib
       user32_lib
-    : # <link>shared:<define>HXCPP_DLL_EXPORT
+    : <link>shared:<define>HXCPP_DLL_EXPORT
     ;
 

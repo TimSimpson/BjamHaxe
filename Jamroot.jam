@@ -7,29 +7,36 @@ using testing ;
 
 boost.use-project 1.55 ;
 
-use-project /hxcpp
-        :   ./hxcpp
-        ;
+lib         user32_lib
+    :
+    :       <name>User32
+    ;
+
+lib         zlib_lib
+    :
+    :       <name>zlib
+    ;
 
 project BjamHaxe
     :   requirements
-        <library>/hxcpp//hxcpp_lib
+            # Haxe stuff
+            # This is all from the Haxe libraries needed by any project using
+            # Haxe (I assume)
+            <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/include
+            <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3
+            <define>HX_WINDOWS
+            <define>HX_UNDEFINE_H       # Failure to set this leads to errors when the string class is included.
+            <define>HXCPP_SCRIPTABLE
+            <define>NOMINMAX
+            <define>HXCPP_VISIT_ALLOCS  # Failure to include this leads to a lack of a "__Visit" function on objects
+            #<define>HX_WINRT            # Without this it seems to use the old unicode style Windows functions
+                    # Causes more problems
+            #<define>INT_MAX=2,147,483,647
+            #<define>INT_MIN=-2,147,483,648
 
-
-        <define>HX_WINDOWS
-        <define>HX_UNDEFINE_H       # Failure to set this leads to errors when the string class is included.
-        <define>HXCPP_SCRIPTABLE
-        <define>NOMINMAX
-        <define>HXCPP_VISIT_ALLOCS  # Failure to include this leads to a lack of a "__Visit" function on objects
-        #<define>HX_WINRT            # Without this it seems to use the old unicode style Windows functions
-                # Causes more problems
-        #<define>INT_MAX=2,147,483,647
-        #<define>INT_MIN=-2,147,483,648
-
-        # Now add requirements for this project
-        <include>src
-        <include>target/include
-
+            # Now add requirements for this project
+            <include>src
+            <include>target/include
     :   usage-requirements
         #TODO: Make Haxe an external lib.
         #<library>/MACARONI_PROJECT_Lp3___Lp3_46_Engine_46_Core___DEV//Lp3_Core
@@ -37,7 +44,142 @@ project BjamHaxe
         #<link>shared:<define>HXCPP_DLL_IMPORT
     ;
 
-lib zlib_hack
+
+###############################################################################
+#        Base Haxe
+#
+#             Anything you generate will need this.
+###############################################################################
+obj Array
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Array.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+
+obj Class
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Class.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Dynamic
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Dynamic.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Enum
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Enum.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Math
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/Math.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj String
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/String.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Anon
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Anon.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Cppia
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Cppia.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Debug
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Debug.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Hash
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Hash.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Scriptable
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Scriptable.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Boot
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Boot.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+        <link>static
+    ;
+obj CppiaBuiltin
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/CppiaBuiltin.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj GC
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/GC.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Interface
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Interface.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Object
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Object.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj StdLibs
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/StdLibs.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj CFFI
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/CFFI.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Date
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Date.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj GCInternal
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/GCInternal.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Lib
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Lib.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+obj Thread
+    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Thread.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+
+
+alias HaxeSources
+    :   Array
+        Class
+        Dynamic
+        Enum
+        #ExampleMain
+        Math
+        String
+        Anon
+        Cppia
+        Debug
+        Hash
+        #NekoAPI
+        Scriptable
+        #Boot
+        CppiaBuiltin
+        GC
+        Interface
+        Object
+        StdLibs
+        CFFI
+        Date
+        GCInternal
+        Lib
+        #RunLibs
+        Thread
+
+        # RunLibs is problematic. When compiling a DLL including it leads to
+        # linking errors. But then the Haxe generated code needs it.
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+
+alias HaxeSourcesStatic
+    :   HaxeSources
+        Boot
+    ;
+
+lib zlib
         :       C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/libs/zlib/ZLib.cpp
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/adler32.c
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/compress.c
@@ -51,14 +193,61 @@ lib zlib_hack
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/trees.c
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/uncompr.c
                 C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3/zutil.c
-    : <include>C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/project/thirdparty/zlib-1.2.3
+
         ;
 
 
-# This is in hxcpp lib... (?)
-obj StdLibs
-    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/StdLibs.cpp
-    :   <link>shared:<define>HXCPP_DLL_EXPORT
+
+lib hxcpp_lib
+    : HaxeSources
+      zlib
+      user32_lib
+    : <link>shared
+    ;
+
+lib hxcpp_lib
+    : HaxeSourcesStatic
+      zlib
+      user32_lib
+    : <link>static
+    ;
+
+
+
+###############################################################################
+#    Generated Haxe
+#
+#         This part of the file builds code Haxe generated as part of this
+#         project.
+###############################################################################
+
+obj __boot__
+    :   target/src/__boot__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj __files__
+    :   target/src/__files__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj __lib__
+    :   target/src/__lib__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj __resources__
+    :   target/src/__resources__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj Std
+    :   target/src/Std.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj Turtle
+    :   target/src/Turtle.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+    ;
+obj haxe_Log
+    :   target/src/haxe/Log.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
     ;
 
 
@@ -66,24 +255,52 @@ obj hack
     :   hack.cpp
     ;
 
-lib haxe_code
-    :   target/src/__boot__.cpp
-        target/src/__files__.cpp
-        target/src/__resources__.cpp
-        target/src/Std.cpp
-        target/src/Turtle.cpp
-        target/src/haxe/Log.cpp
-
-        #StdLibs  # <-- This makes NO SENSE. It's in hxcpp lib but I also need it here
-
-        hack
-    #:   <define>HXCPP_DLL_IMPORT
+obj HaxeLib
+    :   HaxeLib.cpp
+    :   <link>shared
+        <link>shared:<define>HXCPP_DLL_IMPORT
     ;
 
-# Oddly enough this comes from hxcpp (I do not know what I am doing)
-obj Boot
-    :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Boot.cpp
-    :   <link>shared:<define>HXCPP_DLL_EXPORT
+
+alias local_haxe_code_static
+    :   __boot__
+        __files__
+        __lib__
+        __resources__
+        Std
+        Turtle
+        haxe_Log
+    ;
+
+alias local_haxe_code_shared
+    :   # __boot__
+        __files__
+        #__lib__
+        __resources__
+        Std
+        Turtle
+        haxe_Log
+        hack      # Odd..
+        hxcpp_lib # kind weird...
+        HaxeLib   # super weird
+        #Boot
+    ;
+
+#lib local_haxe_lib
+#    :  local_haxe_code_static
+#    :   <link>static
+#    ;
+
+#lib local_haxe_lib
+#    :   local_haxe_code_shared
+#        :   <link>shared
+#  ;
+
+obj haxe_code_main
+    :   target/src/__main__.cpp
+    :   <link>shared:<define>HXCPP_DLL_IMPORT
+        <define>HX_DECLARE_MAIN
+        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
     ;
 
 
@@ -91,38 +308,28 @@ obj haxe_code_lib
     :   target/src/__lib__.cpp
     :   <link>shared:<define>HXCPP_DLL_IMPORT
         <define>HX_DECLARE_MAIN
-        ##<define>HXCPP_DLL_IMPORT
         # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
-    ;
-
-obj haxe_code_main
-    :   target/src/__main__.cpp
-    :   <link>shared:<define>HXCPP_DLL_IMPORT
-        <define>HX_DECLARE_MAIN
-        ##<define>HXCPP_DLL_IMPORT
-        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
-    ;
-
-lib         zlib_lib
-    :
-    :       <name>zlib
     ;
 
 exe Example
-    :   hxcpp
-        haxe_code
-        haxe_code_lib #/main
-        Boot
-        #StdLibs
+    :   hxcpp_lib
+        local_haxe_code_static
+        haxe_code_main
         #ExampleMain.cpp
+    :   <link>static
+    ;
 
-
-        /hxcpp//hxcpp_lib
-        #zlib_lib
-      #  zlib_hack
-       # /hxcpp//zlib_lib
+exe Example
+    :   hxcpp_lib
+        local_haxe_code_shared
+        #haxe_code_lib
+        #ExampleMain.cpp
+    :   <link>shared
     ;
 
 install exe
     : Example
+
+    : <install-dependencies>on <install-type>EXE
+             <install-type>LIB
     ;

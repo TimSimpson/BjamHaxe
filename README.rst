@@ -2,9 +2,30 @@ Haxe with Bjam
 ==============
 
 This is an attempt to better understand how Haxe's C++ target works by using
-Bjam to compile Haxe generated code.
+Bjam (or more correctly, Boost Build) to compile Haxe generated code.
 
-* First, run haxe to create C++ code:
+The bulk of the work here is figuring out how to compile the hxcpp runtime as
+its own library independently of the Haxe generated C++ code created for this
+project. This gets tricky in Windows thanks to the always exciting and
+wonderful __declspec(dllimport/export) keywords that have to be lined up
+perfectly.
+
+I can't seem to make hxcpp compile correctly as a shared library unless I
+modify it. The problem appears to be that "hx/Boot.h"'s void Boot() function is
+not marked to be exported as DLL. However, if I include it as part of the local
+executable, it requires access to dozens of functions and classes defined in
+hxcpp which seem intentionally not marked for export. I do not yet understand
+hxcpp well enough to know it is absolutely required to call the Boot() function
+when using Haxe generated C++ code but it seems likely- attempts I made to use
+code without calling Boot() ended with crashes.
+
+So, here are the steps:
+
+* Open up Boot.h (probably located in
+  C:\\HaxeToolkit\\haxe\\lib\\hxcpp\\<version>\\include\\hx\\Boot.h) and add
+  "HXCPP_EXTERN_CLASS_ATTRIBUTES " right before "void Boot();"
+
+* Next, run haxe to create C++ code in this directory:
 
     haxe -cpp target -debug -D HXCPP_M64 -D no-compilation -main Turtle
 
@@ -12,8 +33,14 @@ Bjam to compile Haxe generated code.
 
     bjam -d+2 -q link=static
 
-TODOS:
-    * Make not terrible.
-    * Fix things to work with link=shared
+  or
+
+    bjam -d+2 -q link=shared
 
 
+   (I HAVE NO IDEA WHAT I AM DOING)
+               /
+        ^. .^ ()
+        / -'-()   <- Dog scientist
+      \|__`-[U]
+       /   \

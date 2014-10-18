@@ -256,9 +256,6 @@ obj haxe_Log
     ;
 
 
-obj hack
-    :   hack.cpp
-    ;
 
 
 
@@ -282,7 +279,7 @@ alias local_haxe_code_shared
         Std
         Turtle
         haxe_Log
-        hack      # Odd..
+        # hack      # Odd..
         hxcpp_lib # kind weird...
         #Boot
     ;

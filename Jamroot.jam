@@ -98,7 +98,6 @@ obj Scriptable
 obj Boot
     :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/Boot.cpp
     :   <link>shared:<define>HXCPP_DLL_EXPORT
-        <link>static
     ;
 obj CppiaBuiltin
     :   C:/HaxeToolkit/haxe/lib/hxcpp/3,1,39/src/hx/CppiaBuiltin.cpp
@@ -151,6 +150,7 @@ alias HaxeSources
         Math
         String
         Anon
+        Boot  #<-- I'M WATCHING YOU
         Cppia
         Debug
         Hash
@@ -176,7 +176,12 @@ alias HaxeSources
 
 alias HaxeSourcesStatic
     :   HaxeSources
-        Boot
+        #Boot
+    ;
+
+
+alias OtherWackyThings
+    :   #Boot
     ;
 
 lib zlib
@@ -265,7 +270,7 @@ obj HaxeLib
 alias local_haxe_code_static
     :   __boot__
         __files__
-        __lib__
+        #__lib__
         __resources__
         Std
         Turtle
@@ -273,7 +278,8 @@ alias local_haxe_code_static
     ;
 
 alias local_haxe_code_shared
-    :   # __boot__
+    :    __boot__  # <-- Had to change Boot.h to use __declspec( dllexport )
+                   #     to make this work. >_<
         __files__
         #__lib__
         __resources__
@@ -282,7 +288,7 @@ alias local_haxe_code_shared
         haxe_Log
         hack      # Odd..
         hxcpp_lib # kind weird...
-        HaxeLib   # super weird
+        # HaxeLib   # super weird
         #Boot
     ;
 
@@ -296,34 +302,43 @@ alias local_haxe_code_shared
 #        :   <link>shared
 #  ;
 
-obj haxe_code_main
-    :   target/src/__main__.cpp
-    :   <link>shared:<define>HXCPP_DLL_IMPORT
-        <define>HX_DECLARE_MAIN
-        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
-    ;
+#obj haxe_code_main
+#    :   target/src/__main__.cpp
+#    :   <link>shared:<define>HXCPP_DLL_IMPORT
+#        <define>HX_DECLARE_MAIN
+#        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
+#    ;
 
 
-obj haxe_code_lib
-    :   target/src/__lib__.cpp
+#obj haxe_code_lib
+#    :   target/src/__lib__.cpp
+#    :   <link>shared:<define>HXCPP_DLL_IMPORT
+#        <define>HX_DECLARE_MAIN
+#        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
+#    ;
+
+obj ExampleMain
+    :   ExampleMain.cpp
     :   <link>shared:<define>HXCPP_DLL_IMPORT
-        <define>HX_DECLARE_MAIN
-        # If not, HX_BEGIN_MAIN won't be the hx style library thing we need
     ;
+
 
 exe Example
     :   hxcpp_lib
         local_haxe_code_static
-        haxe_code_main
-        #ExampleMain.cpp
+        #haxe_code_main
+        ExampleMain
+        OtherWackyThings
     :   <link>static
     ;
 
 exe Example
     :   hxcpp_lib
         local_haxe_code_shared
+        #haxe_code_main
         #haxe_code_lib
-        #ExampleMain.cpp
+        ExampleMain
+        OtherWackyThings
     :   <link>shared
     ;
 

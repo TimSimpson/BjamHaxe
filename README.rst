@@ -37,6 +37,7 @@ So, here are the steps:
 
     bjam -d+2 -q link=shared
 
+.. code-block:: dog
 
    (I HAVE NO IDEA WHAT I AM DOING)
                /

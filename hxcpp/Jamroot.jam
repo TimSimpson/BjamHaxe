@@ -37,6 +37,8 @@ project HxCpp
             # Now add requirements for this project
              #<link>shared:<define>HXCPP_DLL_EXPORT
 
+             # Just for that weirdo Std.h file that gets generated...
+             <include>../target/include
     :   usage-requirements
         #TODO: Make Haxe an external lib.
         #<library>/MACARONI_PROJECT_Lp3___Lp3_46_Engine_46_Core___DEV//Lp3_Core
@@ -136,6 +138,13 @@ obj Thread
     :   <link>shared:<define>HXCPP_DLL_EXPORT
     ;
 
+# This is weird- it's Haxe generated code, but seems to need to compile
+# with HxCppLib
+obj HaxeGeneratedStd
+    :   ../target/src/Std.cpp
+    :   <link>shared:<define>HXCPP_DLL_EXPORT
+    ;
+
 alias HaxeSources
     :   Array
         Class
@@ -162,7 +171,7 @@ alias HaxeSources
         Lib
         #RunLibs
         Thread
-
+       # HaxeGeneratedStd
         # RunLibs is problematic. When compiling a DLL including it leads to
         # linking errors. But then the Haxe generated code needs it.
     :   #<link>shared:<define>HXCPP_DLL_EXPORT

@@ -46,6 +46,10 @@ obj StdLibs
     ;
 
 
+obj hack
+    :   hack.cpp
+    ;
+
 lib haxe_code
     :   target/src/__boot__.cpp
         target/src/__files__.cpp
@@ -56,7 +60,9 @@ lib haxe_code
 
         #StdLibs  # <-- This makes NO SENSE. It's in hxcpp lib but I also need it here
         /hxcpp//hxcpp_lib
-    :   <define>HXCPP_DLL_IMPORT
+
+        hack
+    #:   <define>HXCPP_DLL_EXPORT
     ;
 
 # Oddly enough this comes from hxcpp (I do not know what I am doing)
@@ -85,9 +91,9 @@ obj haxe_code_main
 exe Example
     :   hxcpp
         haxe_code
-        haxe_code_lib #/main
+        #haxe_code_lib #/main
         Boot
-        StdLibs
+        #StdLibs
         #ExampleMain.cpp
     ;
 

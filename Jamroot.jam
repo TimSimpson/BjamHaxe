@@ -260,11 +260,7 @@ obj hack
     :   hack.cpp
     ;
 
-obj HaxeLib
-    :   HaxeLib.cpp
-    :   <link>shared
-        <link>shared:<define>HXCPP_DLL_IMPORT
-    ;
+
 
 
 alias local_haxe_code_static
@@ -288,7 +284,6 @@ alias local_haxe_code_shared
         haxe_Log
         hack      # Odd..
         hxcpp_lib # kind weird...
-        # HaxeLib   # super weird
         #Boot
     ;
 

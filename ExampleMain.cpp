@@ -6,10 +6,6 @@
 #include <vector>
 
 
-bool TurtleOver25(Turtle t) {
-    return t->getSpots() > 25;
-}
-
 extern "C" int main(int argc, char *argv[])
 {
     HX_TOP_OF_STACK \
@@ -31,7 +27,10 @@ extern "C" int main(int argc, char *argv[])
         turtles.push_back(Turtle_obj::__new(HX_CSTRING("Veccy"), index));
     }
 
-    const int c = std::count_if(turtles.begin(), turtles.end(), TurtleOver25);
+    const int c = std::count_if(
+      turtles.begin(), turtles.end(),
+      [] (Turtle t) { return t->getSpots() > 25; }
+    );
     std::cout << "There are " << c << " turtles with over 25 spots.\n";
 
 }
